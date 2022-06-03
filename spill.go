@@ -2,16 +2,68 @@ package main
 
 import (
 	"fmt"
+	"github.com/likexian/whois"
+	"net"
 	"os"
 )
 
 var domain string = "domain"
+
+func ARecords() {
+	fmt.Println(":::A Records:::")
+	arecords, _ := net.LookupIP(domain)
+	for _, a := range arecords {
+		fmt.Println(a)
+	}
+}
+
+/*
+func CName() {
+	fmt.Println(":::CNAME Records:::")
+	cnamerecord, _ := net.LookupCNAME(domain)
+	for _, cn := range cnamerecord {
+		fmt.Println(cn)
+	}
+}
+*/
+func MailExchange() {
+	fmt.Println(":::MX Records:::")
+	mxrecords, _ := net.LookupMX(domain)
+	for _, mx := range mxrecords {
+		fmt.Println(mx.Host, mx.Pref)
+	}
+}
+
+func TextRecords() {
+	fmt.Println(":::TXT Records:::")
+	textrecords, _ := net.LookupTXT(domain)
+	for _, txt := range textrecords {
+		fmt.Println(txt)
+	}
+}
+
+func NameServers() {
+	fmt.Println(":::Name Servers:::")
+	nameservers, _ := net.LookupNS(domain)
+	for _, ns := range nameservers {
+		fmt.Println(ns)
+	}
+}
+
+func WhoIs() {
+	fmt.Println(":::WHOIS:::")
+	result, err := whois.Whois(domain)
+	if err == nil {
+		fmt.Println(result)
+	}
+}
 
 func Help() {
 	fmt.Printf("spill [-switch] {%s}", domain)
 	fmt.Println("\nThis application allows you to search for whois and dig information on the fly")
 	fmt.Println("Without any switches, It will give all available information")
 	fmt.Println("Use -a for A records")
+	//fmt.Println("Use -c for CNAME records")
 	fmt.Println("Use -m for MX records")
 	fmt.Println("Use -t for TXT records")
 	fmt.Println("Use -n for Name Servers")
@@ -39,13 +91,32 @@ func main() {
 		Help()
 	} else if lengthArgs > 1 {
 		switch os.Args[1] {
+		case "-a":
+			ARecords()
+		/*
+			case "-c":
+
+				CName()
+		*/
+		case "-m":
+			MailExchange()
+		case "-t":
+			TextRecords()
+		case "-n":
+			NameServers()
 		case "-i":
 			Info()
 		case "-h":
 			Help()
+		case "-w":
+			WhoIs()
 		default:
-			fmt.Println("\n\nNo recognized switch given!\n")
-			Help()
+			ARecords()
+			//CName()
+			MailExchange()
+			TextRecords()
+			NameServers()
+			WhoIs()
 		}
 	} else {
 		Help()
