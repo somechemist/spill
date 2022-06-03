@@ -25,26 +25,26 @@ func Info() {
 }
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Println("Please enter the domain:\n")
+		fmt.Println("Please enter the domain:")
 		fmt.Scanln(&domain)
 		if domain == "" {
 			domain = "domain"
-			Help()
-			//os.Exit(0)
 		}
 	} else {
 		domain = os.Args[2]
-		fmt.Print(domain)
-		fmt.Println("\nelse\n")
 	}
-	if len(os.Args) > 1 {
+	var lengthArgs int = len(os.Args)
+	if lengthArgs > 1 {
 		switch os.Args[1] {
 		case "-i":
 			Info()
 		case "-h":
 			Help()
 		default:
-			fmt.Println("\n\nNo recognized switch given!")
+			fmt.Println("\n\nNo recognized switch given!\n")
+			Help()
 		}
+	} else {
+		Help()
 	}
 }
