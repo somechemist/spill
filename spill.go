@@ -24,7 +24,8 @@ func Info() {
 	fmt.Println("\n      `.-::::::-.`\n  .:-::::::::::::::-:.\n  `_:::    ::    :::_`\n   .:( ^   :: ^   ):.   Written in GO\n   `:::   (..)   :::.   By Justin Powell\n   `:::::::UU:::::::`\n   .::::::::::::::::.\n   O::::::::::::::::O   06-02-2022\n   -::::::::::::::::-\n   `::::::::::::::::`\n    .::::::::::::::.\n      oO:::::::Oo\n")
 }
 func main() {
-	if len(os.Args) < 3 {
+	var lengthArgs int = len(os.Args)
+	if lengthArgs < 3 {
 		fmt.Println("Please enter the domain:")
 		fmt.Scanln(&domain)
 		if domain == "" {
@@ -33,8 +34,10 @@ func main() {
 	} else {
 		domain = os.Args[2]
 	}
-	var lengthArgs int = len(os.Args)
-	if lengthArgs > 1 {
+	if lengthArgs > 3 {
+		fmt.Println("Too many arguments given!")
+		Help()
+	} else if lengthArgs > 1 {
 		switch os.Args[1] {
 		case "-i":
 			Info()
