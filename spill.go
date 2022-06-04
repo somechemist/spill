@@ -17,15 +17,6 @@ func ARecords() {
 	}
 }
 
-/*
-func CName() {
-	fmt.Println(":::CNAME Records:::")
-	cnamerecord, _ := net.LookupCNAME(domain)
-	for _, cn := range cnamerecord {
-		fmt.Println(cn)
-	}
-}
-*/
 func MailExchange() {
 	fmt.Println(":::MX Records:::")
 	mxrecords, _ := net.LookupMX(domain)
@@ -63,7 +54,6 @@ func Help() {
 	fmt.Println("\nThis application allows you to search for whois and dig information on the fly")
 	fmt.Println("Without any switches, It will give all available information")
 	fmt.Println("Use -a for A records")
-	//fmt.Println("Use -c for CNAME records")
 	fmt.Println("Use -m for MX records")
 	fmt.Println("Use -t for TXT records")
 	fmt.Println("Use -n for Name Servers")
@@ -93,11 +83,6 @@ func main() {
 		switch os.Args[1] {
 		case "-a":
 			ARecords()
-		/*
-			case "-c":
-
-				CName()
-		*/
 		case "-m":
 			MailExchange()
 		case "-t":
@@ -112,7 +97,6 @@ func main() {
 			WhoIs()
 		default:
 			ARecords()
-			//CName()
 			MailExchange()
 			TextRecords()
 			NameServers()
