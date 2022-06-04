@@ -5,6 +5,7 @@ import (
 	"github.com/likexian/whois"
 	"net"
 	"os"
+	"strings"
 )
 
 var domain string = "domain"
@@ -67,19 +68,78 @@ func Info() {
 }
 func main() {
 	var lengthArgs int = len(os.Args)
-	if lengthArgs < 3 {
+
+	if lengthArgs == 1 {
 		fmt.Println("Please enter the domain:")
+		fmt.Println("args is 1")
 		fmt.Scanln(&domain)
 		if domain == "" {
 			domain = "domain"
 		}
-	} else {
-		domain = os.Args[2]
-	}
-	if lengthArgs > 3 {
-		fmt.Println("Too many arguments given!")
-		Help()
-	} else if lengthArgs > 1 {
+		ARecords()
+		MailExchange()
+		TextRecords()
+		NameServers()
+		WhoIs()
+	} else if lengthArgs == 2 {
+		if strings.Contains(os.Args[1], "-") {
+			fmt.Println("args is 2")
+			fmt.Println("Please enter the domain:")
+			fmt.Scanln(&domain)
+			if domain == "" {
+				//domain = "domain"
+				Help()
+				return
+			}
+			switch os.Args[1] {
+			case "-a":
+				ARecords()
+			case "-m":
+				MailExchange()
+			case "-t":
+				TextRecords()
+			case "-n":
+				NameServers()
+			case "-i":
+				Info()
+			case "-h":
+				Help()
+			case "-w":
+				WhoIs()
+			default:
+				ARecords()
+				MailExchange()
+				TextRecords()
+				NameServers()
+				WhoIs()
+			}
+		} else if strings.Contains(os.Args[1], ".") {
+			domain = os.Args[1]
+			ARecords()
+			MailExchange()
+			TextRecords()
+			NameServers()
+			WhoIs()
+		} else {
+			fmt.Println("Please enter the domain:")
+			fmt.Println("outer else")
+			fmt.Scanln(&domain)
+			if domain == "" {
+				domain = "domain"
+			}
+			ARecords()
+			MailExchange()
+			TextRecords()
+			NameServers()
+			WhoIs()
+		}
+	} else if lengthArgs == 3 {
+		if strings.Contains(os.Args[2], ".") {
+			domain = os.Args[2]
+		} else {
+			fmt.Println("invalid domain, please include .com, .net, etc.")
+			os.Exit(1)
+		}
 		switch os.Args[1] {
 		case "-a":
 			ARecords()
@@ -102,7 +162,5 @@ func main() {
 			NameServers()
 			WhoIs()
 		}
-	} else {
-		Help()
 	}
 }
