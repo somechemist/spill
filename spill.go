@@ -10,6 +10,41 @@ import (
 
 var domain string = "domain"
 
+func GetDomain() {
+	fmt.Println("Please enter the domain:")
+	fmt.Scanln(&domain)
+	if domain == "\n" {
+		domain = "domain"
+		Help()
+		os.Exit(1)
+	}
+}
+
+func SwitchHandler() {
+	switch os.Args[1] {
+	case "-a":
+		ARecords()
+	case "-m":
+		MailExchange()
+	case "-t":
+		TextRecords()
+	case "-n":
+		NameServers()
+	case "-i":
+		Info()
+	case "-h":
+		Help()
+	case "-w":
+		WhoIs()
+	default:
+		ARecords()
+		MailExchange()
+		TextRecords()
+		NameServers()
+		WhoIs()
+	}
+}
+
 func ARecords() {
 	fmt.Println(":::A Records:::")
 	arecords, _ := net.LookupIP(domain)
@@ -50,6 +85,14 @@ func WhoIs() {
 	}
 }
 
+func AllRecords() {
+	ARecords()
+	MailExchange()
+	TextRecords()
+	NameServers()
+	WhoIs()
+}
+
 func Help() {
 	fmt.Printf("spill [-switch] {%s}", domain)
 	fmt.Println("\nThis application allows you to search for whois and dig information on the fly")
@@ -70,69 +113,18 @@ func main() {
 	var lengthArgs int = len(os.Args)
 
 	if lengthArgs == 1 {
-		fmt.Println("Please enter the domain:")
-		fmt.Println("args is 1")
-		fmt.Scanln(&domain)
-		if domain == "" {
-			domain = "domain"
-		}
-		ARecords()
-		MailExchange()
-		TextRecords()
-		NameServers()
-		WhoIs()
+		GetDomain()
+		AllRecords()
 	} else if lengthArgs == 2 {
 		if strings.Contains(os.Args[1], "-") {
-			fmt.Println("Please enter the domain:")
-			fmt.Scanln(&domain)
-			if domain == "\n" {
-				domain = "domain"
-				Help()
-				os.Exit(1)
-			}
-			switch os.Args[1] {
-			case "-a":
-				ARecords()
-			case "-m":
-				MailExchange()
-			case "-t":
-				TextRecords()
-			case "-n":
-				NameServers()
-			case "-i":
-				Info()
-			case "-h":
-				Help()
-			case "-w":
-				WhoIs()
-			default:
-				ARecords()
-				MailExchange()
-				TextRecords()
-				NameServers()
-				WhoIs()
-			}
+			GetDomain()
+			SwitchHandler()
 		} else if strings.Contains(os.Args[1], ".") {
 			domain = os.Args[1]
-			ARecords()
-			MailExchange()
-			TextRecords()
-			NameServers()
-			WhoIs()
+			AllRecords()
 		} else {
-			fmt.Println("Please enter the domain:")
-			fmt.Println("outer else")
-			fmt.Scanln(&domain)
-			if domain == "\n" {
-				domain = "domain"
-				Help()
-				os.Exit(1)
-			}
-			ARecords()
-			MailExchange()
-			TextRecords()
-			NameServers()
-			WhoIs()
+			GetDomain()
+			AllRecords()
 		}
 	} else if lengthArgs == 3 {
 		if strings.Contains(os.Args[2], ".") {
@@ -141,28 +133,7 @@ func main() {
 			fmt.Println("invalid domain, please include .com, .net, etc.")
 			os.Exit(1)
 		}
-		switch os.Args[1] {
-		case "-a":
-			ARecords()
-		case "-m":
-			MailExchange()
-		case "-t":
-			TextRecords()
-		case "-n":
-			NameServers()
-		case "-i":
-			Info()
-		case "-h":
-			Help()
-		case "-w":
-			WhoIs()
-		default:
-			ARecords()
-			MailExchange()
-			TextRecords()
-			NameServers()
-			WhoIs()
-		}
+		SwitchHandler()
 	} else {
 		fmt.Println("Too many arguments given.\nPlease try again.")
 	}
