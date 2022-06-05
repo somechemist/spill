@@ -162,5 +162,7 @@ func main() {
 			NameServers()
 			WhoIs()
 		}
+	} else {
+		fmt.Println("Too many arguments given.\nPlease try again.")
 	}
 }
