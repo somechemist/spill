@@ -83,13 +83,12 @@ func main() {
 		WhoIs()
 	} else if lengthArgs == 2 {
 		if strings.Contains(os.Args[1], "-") {
-			fmt.Println("args is 2")
 			fmt.Println("Please enter the domain:")
 			fmt.Scanln(&domain)
-			if domain == "" {
-				//domain = "domain"
+			if domain == "\n" {
+				domain = "domain"
 				Help()
-				return
+				os.Exit(1)
 			}
 			switch os.Args[1] {
 			case "-a":
@@ -124,8 +123,10 @@ func main() {
 			fmt.Println("Please enter the domain:")
 			fmt.Println("outer else")
 			fmt.Scanln(&domain)
-			if domain == "" {
+			if domain == "\n" {
 				domain = "domain"
+				Help()
+				os.Exit(1)
 			}
 			ARecords()
 			MailExchange()
